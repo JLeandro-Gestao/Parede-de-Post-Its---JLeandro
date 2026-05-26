@@ -126,6 +126,7 @@ body{font-family:'KoHo',sans-serif;background:#0A183C;color:#F8F8F8;min-height:1
           <th style="padding:10px 12px;text-align:left;color:#FFAD67;font-weight:700;border-bottom:1px solid rgba(255,173,103,.2)">Celular</th>
           <th style="padding:10px 12px;text-align:left;color:#FFAD67;font-weight:700;border-bottom:1px solid rgba(255,173,103,.2)">Resposta</th>
           <th style="padding:10px 12px;text-align:left;color:#FFAD67;font-weight:700;border-bottom:1px solid rgba(255,173,103,.2)">Horário</th>
+          <th style="padding:10px 12px;text-align:center;color:#FFAD67;font-weight:700;border-bottom:1px solid rgba(255,173,103,.2)">Ação</th>
         </tr></thead>
         <tbody id="atb"></tbody>
       </table>
@@ -260,6 +261,21 @@ async function doAdm() {
       tb.appendChild(tr);
     });
   } catch(e) { console.error(e); }
+}
+
+async function deletarItem(id) {
+  if (!confirm('Excluir esta resposta da parede?')) return;
+  try {
+    const r = await fetch(`/api/delete/${id}`, { method: 'DELETE' });
+    if (r.ok) {
+      // Remove da tabela
+      const row = document.getElementById(`row-${id}`);
+      if (row) row.remove();
+      // Atualiza cache
+      leadsCache = leadsCache.filter(l => l.id !== id);
+      document.getElementById('act').textContent = `(${leadsCache.length} participantes)`;
+    }
+  } catch(e) { alert('Erro ao excluir. Tente novamente.'); }
 }
 
 function doCSV() {
