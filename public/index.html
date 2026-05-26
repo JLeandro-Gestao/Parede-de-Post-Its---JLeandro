@@ -288,6 +288,9 @@ function doCSV() {
 // ── INIT ──────────────────────────────────────────────────────────
 show('vf');
 fetchCount();
+setInterval(() => {
+  if (document.getElementById('vw').style.display !== 'none') fetchWall();
+}, 3000);
 </script>
 </body>
 </html>
